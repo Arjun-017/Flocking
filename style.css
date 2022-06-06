@@ -72,3 +72,17 @@ canvas {
 .animate-frame {
   transform: translateY(-100%);
 }
+
+@media only screen and (max-width: 700px) {
+  #splash-container h1 {
+    font-size: 1.5rem;
+  }
+  #splash-container p {
+    font-size: 0.75rem;
+  }
+  #splash-container button {
+    font-size: 0.85rem;
+    padding: 8px 15px;
+    font-weight: 400;
+  }
+}
