@@ -3,15 +3,11 @@ const button = document.querySelector("button");
 const mainFrame = document.querySelector("#main-container");
 const splashFrame = document.querySelector("#splash-container");
 const canvasFrame = document.querySelector("#canvas-container");
-
 var ctx = canvas.getContext("2d");
-const FPS = 30;
-const NUMBER_OF_BOIDS = 100;
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
-let flag = true;
-let n = 0;
 const boids = [];
+const FPS = 30;
+let NUMBER_OF_BOIDS = 0;
+
 class Boid {
   constructor() {
     this.position = {
@@ -21,13 +17,13 @@ class Boid {
     this.velocity = { x: this.getRandom(20), y: this.getRandom(20) };
     this.acceleration = { x: this.getRandom(5), y: this.getRandom(5) };
     this.angle = 0;
-    this.maxSpeed = 12;
+    this.maxSpeed = 15;
     this.perceptionRadius = 100;
-    this.maxForce = 0.55;
-    this.seperationRadius = 100;
+    this.maxForce = 1;
+    this.seperationRadius = 50;
   }
   draw() {
-    ctx.fillStyle = "#999";
+    ctx.fillStyle = "#888";
     var slope = this.velocity.y / this.velocity.x;
     if (this.velocity.y > 0 && this.velocity.x > 0)
       this.angle = Math.PI + Math.abs(Math.atan(slope));
@@ -37,12 +33,11 @@ class Boid {
       this.angle = Math.PI - Math.abs(Math.atan(slope));
     if (this.velocity.y < 0 && this.velocity.x < 0)
       this.angle = Math.abs(Math.atan(slope));
+    var h = 15.8114;
 
-    if (n < 1000) {
-      console.log((this.angle * 190) / Math.PI);
-      n++;
+    if (window.innerWidth < 700) {
+      var h = 10.44;
     }
-    var h = Math.sqrt(15 * 15 + 5 * 5);
     var phi = Math.asin(5 / h);
     var x1 = this.position.x + h * Math.cos(this.angle + phi);
     var y1 = this.position.y + h * Math.sin(this.angle + phi);
@@ -195,6 +190,13 @@ class Boid {
   }
 }
 function init() {
+  if (window.innerWidth < 700) {
+    NUMBER_OF_BOIDS = 100;
+  } else {
+    NUMBER_OF_BOIDS = 200;
+  }
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
   for (var i = 0; i < NUMBER_OF_BOIDS; i++) {
     var b = new Boid();
     b.draw();
@@ -227,3 +229,8 @@ button.onclick = function () {
   canvas.style.opacity = 1;
   main();
 };
+
+document.addEventListener("resize", () => {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+});
